@@ -5,7 +5,8 @@ Access-Control-Allow-Origin: *
 
 <?xml version="1.0" encoding="ISO-8859-1" ?><deviceList>}
   
-set show_internal ""
+set show_internal 0
+set show_remote 0
 
 catch {
 	set input $env(QUERY_STRING)
@@ -19,7 +20,8 @@ catch {
 
 array set res [rega_script {
 
-	string show_internal = "} $show_internal {";
+	integer show_internal = "} $show_internal {";
+  integer show_remote = "} $show_remote {";
 	
     integer DIR_SENDER      = 1;
     integer DIR_RECEIVER    = 2;
@@ -33,7 +35,9 @@ array set res [rega_script {
     {
       object  oDevice   = dom.GetObject(sDevId);
       boolean bDevReady = oDevice.ReadyConfig();
-      if( (true == bDevReady) && ("HMW-RCV-50" != oDevice.HssType()) && ("HM-RCV-50" != oDevice.HssType()) )
+      boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType() ) );
+
+      if( (true == bDevReady) && ( ( isRemote == false ) || ( show_remote == 1 ) ) ) 
       {
         string sDevInterfaceId = oDevice.Interface();
         string sDevInterface   = dom.GetObject(sDevInterfaceId).Name();
@@ -59,7 +63,7 @@ array set res [rega_script {
           	show = true;
           }
           	
-          if ( show_internal == "1"){
+          if ( show_internal == 1){
           	show = true;
           }          
           

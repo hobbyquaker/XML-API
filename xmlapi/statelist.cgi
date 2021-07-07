@@ -8,6 +8,7 @@ Access-Control-Allow-Origin: *
 
 set ise_id 0
 set show_internal 0
+set show_remote 0
 
 catch {
   set input $env(QUERY_STRING)
@@ -19,8 +20,9 @@ catch {
   }
 }
 
-set comm "var ise_id=$ise_id;\n"
-set comm "var show_internal=$show_internal;\n"
+append comm "var ise_id=$ise_id;\n"
+append comm "var show_internal=$show_internal;\n"
+append comm "var show_remote=$show_remote;\n"
 
 
 if { $ise_id != 0 } then {
@@ -63,8 +65,10 @@ string sDPId;
 	foreach (sDevId, root.Devices().EnumUsedIDs())
 	{
 		object oDevice   = dom.GetObject(sDevId);
+		
+		boolean isRemote = ( ("HMW-RCV-50" == oDevice.HssType()) || ("HM-RCV-50" == oDevice.HssType() ) );
 
-		if( oDevice.ReadyConfig() && (oDevice.Name() != "Zentrale") && (oDevice.Name() != "HMW-RCV-50 BidCoS-Wir") )
+		if( oDevice.ReadyConfig() && ( ( isRemote == false ) || ( show_remote == 1 ) ) )
 		{
 			Write("<device");
 			Write(" name='" # oDevice.Name() # "'");
