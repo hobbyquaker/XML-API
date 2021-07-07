@@ -49,8 +49,14 @@ append hm_script {;
                 if (sShowText == "true") {
                         Write("' value_text='"); WriteXML( oSysVar.ValueList().StrValueByIndex(';', oSysVar.Value()));
                 }
-                Write("' min='"); WriteXML( oSysVar.ValueMin());
-                Write("' max='"); WriteXML( oSysVar.ValueMax());
+                Write("' min='");
+                if (oSysVar.ValueType() == 4) {
+                    WriteXML( oSysVar.ValueMin());
+                }
+                Write("' max='");
+                if (oSysVar.ValueType() == 4) {
+                    WriteXML( oSysVar.ValueMax());
+                }
                 Write("' unit='"); WriteXML( oSysVar.ValueUnit());
                 Write("' type='"); WriteXML( oSysVar.ValueType());
                 Write("' subtype='"); WriteXML( oSysVar.ValueSubType());
