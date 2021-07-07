@@ -105,6 +105,7 @@ array set res [rega_script {
 									Write("' valuetype='" # oDP.ValueType());
 									Write("' valueunit='" # oDP.ValueUnit());
 									Write("' timestamp='" # oDP.Timestamp().ToInteger());
+									Write("' lastdpactiontime='" # oDP.LastDPActionTime().ToInteger());
 									Write("' />");
 								}
 							}
